@@ -126,7 +126,7 @@ export const MarketSwitcher = () => {
   const [trackEvent, currentMarket, setCurrentMarket] = useRootStore(
     useShallow((store) => [store.trackEvent, store.currentMarket, store.setCurrentMarket])
   );
-  const { switchNetwork } = useWeb3Context();
+  const { switchNetwork, chainId: activeChain } = useWeb3Context();
 
   const isV3MarketsAvailable = availableMarkets
     .map((marketId: CustomMarket) => {
@@ -177,6 +177,18 @@ export const MarketSwitcher = () => {
       return ena ? -1 : 1;
     });
   }, [filteredMarkets, infinexSupportedEvmNetworks, isInfinexConnected]);
+
+  React.useEffect(() => {
+    if (!currentMarket) return;
+
+    const { market } = getMarketInfoById(currentMarket);
+    // only switch if we’re not already on the right chain
+    if (activeChain !== market.chainId) {
+      switchNetwork(market.chainId);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeChain]);
 
   return (
     <TextField
