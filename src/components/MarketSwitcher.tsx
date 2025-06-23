@@ -14,7 +14,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useWeb3Context } from 'src/libs/hooks/useWeb3Context';
 import { useRootStore } from 'src/store/root';
 import { BaseNetworkConfig } from 'src/ui-config/networksConfig';
@@ -178,7 +178,7 @@ export const MarketSwitcher = () => {
     });
   }, [filteredMarkets, infinexSupportedEvmNetworks, isInfinexConnected]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentMarket) return;
 
     const { market } = getMarketInfoById(currentMarket);
