@@ -1,15 +1,17 @@
-import { useInfinexSwidge, useInfinexUser } from '@infinex/connect-sdk';
+import { useInfinexUser, useInfinexUserBalances } from '@infinex/connect-sdk';
 import { Box, Button, Divider, Menu, MenuItem, Stack, Typography, useTheme } from '@mui/material';
 import { ConnectKitButton } from 'connectkit';
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
+import { useChainId } from 'wagmi';
 
 import { AvatarSize } from './Avatar';
 import { UserDisplay } from './UserDisplay';
 
 const UserMenuDropdown: React.FC = () => {
   const theme = useTheme();
-  const { data: user } = useInfinexUser();
-  const { performSwidge } = useInfinexSwidge();
+  const { data: user, refresh: refreshUser } = useInfinexUser();
+  const chainId = useChainId();
+  const { data: balances, refresh: refreshBalances } = useInfinexUserBalances();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const open = Boolean(anchor);
 
@@ -19,6 +21,13 @@ const UserMenuDropdown: React.FC = () => {
   const handleClose = () => {
     setAnchor(null);
   };
+
+  useEffect(() => {
+    refreshUser();
+    refreshBalances();
+    // infinite loop with `refreshBalances` / `refreshUser`
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chainId]);
 
   return (
     <ConnectKitButton.Custom>
@@ -72,7 +81,7 @@ const UserMenuDropdown: React.FC = () => {
                   Available balance
                 </Typography>
                 <Typography variant="subheader1" fontSize="medium" color="lightgreen">
-                  {user?.availableBalance?.formatted || '1'} ETH
+                  {balances?.chainBalanceNative.formatted ?? '0'} ETH
                 </Typography>
               </Box>
 
@@ -90,24 +99,9 @@ const UserMenuDropdown: React.FC = () => {
                         Other balances
                       </Typography>
                       <Typography variant="subheader1" fontSize="medium">
-                        {user?.totalBalance?.formatted || '0'} USD
+                        {balances?.totalBalanceUsd.formatted ?? '0'} USD
                       </Typography>
                     </Box>
-                    <Button
-                      size="medium"
-                      variant="outlined"
-                      fullWidth
-                      sx={{ textTransform: 'none', p: 0 }}
-                      onClick={() => {
-                        performSwidge({
-                          chain: 'ethereum',
-                          address: '0xd0A882a9d2e870238fDf188764E3996DebF5A5E4',
-                          assetAddress: 'native',
-                        });
-                      }}
-                    >
-                      Swidge into Base
-                    </Button>
                   </Stack>
                 </>
               )}

@@ -1,6 +1,7 @@
 import { ChainId, ProtocolAction } from '@aave/contract-helpers';
 import { BigNumberValue, USD_DECIMALS, valueToBigNumber } from '@aave/math-utils';
 
+// import { selectCurrentChainIdMarkets } from 'src/store/poolSelectors';
 import { CustomMarket } from './marketsAndNetworksConfig';
 
 export function hexToAscii(_hex: string): string {
@@ -37,7 +38,9 @@ export const makeCancelable = <T>(promise: Promise<T>) => {
 
 export const optimizedPath = (currentChainId: ChainId) => {
   return (
-    currentChainId === ChainId.arbitrum_one || currentChainId === ChainId.optimism
+    // WE DON'T WANT TO USE COMPRESSED ARGS FOR NOW
+    // currentChainId === ChainId.arbitrum_one || currentChainId === ChainId.optimism
+    !currentChainId
     // ||
     // currentChainId === ChainId.optimism_kovan
   );
@@ -117,7 +120,6 @@ export const showExternalIncentivesTooltip = (
   if (
     kernelPointsEnabled &&
     (currentMarket === CustomMarket.proto_mainnet_v3 ||
-      currentMarket === CustomMarket.proto_lido_v3 ||
       currentMarket === CustomMarket.proto_base_v3 ||
       currentMarket === CustomMarket.proto_arbitrum_v3) &&
     protocolAction === ProtocolAction.supply &&

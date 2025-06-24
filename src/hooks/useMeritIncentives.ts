@@ -6,7 +6,6 @@ import {
   AaveV3Base,
   AaveV3Celo,
   AaveV3Ethereum,
-  AaveV3EthereumLido,
   AaveV3Gnosis,
 } from '@bgd-labs/aave-address-book';
 import { useQuery } from '@tanstack/react-query';
@@ -178,38 +177,6 @@ const MERIT_DATA_MAP: Record<string, Record<string, MeritReserveIncentiveData[]>
         customMessage: antiLoopMessage,
         customForumLink:
           'https://governance.aave.com/t/arfc-set-aci-as-emission-manager-for-liquidity-mining-programs/17898/85',
-      },
-    ],
-  },
-  [CustomMarket.proto_lido_v3]: {
-    ETH: [
-      {
-        action: MeritAction.ETHEREUM_PRIME_SUPPLY_ETH,
-        rewardTokenAddress: AaveV3EthereumLido.ASSETS.WETH.A_TOKEN,
-        rewardTokenSymbol: 'aEthLidoWETH',
-        protocolAction: ProtocolAction.supply,
-        customMessage: antiLoopMessage,
-        customForumLink: joinedEthCorrelatedIncentiveForumLink,
-      },
-    ],
-    WETH: [
-      {
-        action: MeritAction.ETHEREUM_PRIME_SUPPLY_ETH,
-        rewardTokenAddress: AaveV3EthereumLido.ASSETS.WETH.A_TOKEN,
-        rewardTokenSymbol: 'aEthLidoWETH',
-        protocolAction: ProtocolAction.supply,
-        customMessage: antiLoopMessage,
-        customForumLink: joinedEthCorrelatedIncentiveForumLink,
-      },
-    ],
-    ezETH: [
-      {
-        action: MeritAction.ETHEREUM_PRIME_SUPPLY_EZETH,
-        rewardTokenAddress: '0x3B50805453023a91a8bf641e279401a0b23FA6F9', // Renzo (REZ)
-        rewardTokenSymbol: 'REZ',
-        protocolAction: ProtocolAction.supply,
-        customMessage: antiLoopMessage,
-        customForumLink: joinedEthCorrelatedIncentiveForumLink,
       },
     ],
   },

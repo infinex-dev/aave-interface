@@ -47,15 +47,13 @@ const head = [
 ];
 
 export const BorrowedPositionsList = () => {
-  const { user, loading, eModes, reserves } = useAppDataContext();
-  const [currentMarketData, currentNetworkConfig] = useRootStore(
-    useShallow((store) => [store.currentMarketData, store.currentNetworkConfig])
-  );
+  const { user, loading, reserves } = useAppDataContext();
+  const [currentNetworkConfig] = useRootStore(useShallow((store) => [store.currentNetworkConfig]));
   const [sortName, setSortName] = useState('');
   const [sortDesc, setSortDesc] = useState(false);
   const theme = useTheme();
   const downToXSM = useMediaQuery(theme.breakpoints.down('xsm'));
-  const showEModeButton = currentMarketData.v3 && Object.keys(eModes).length > 1;
+  const showEModeButton = false;
   const [tooltipOpen, setTooltipOpen] = useState<boolean>(false);
 
   if (loading || !user)

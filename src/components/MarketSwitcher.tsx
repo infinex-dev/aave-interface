@@ -1,8 +1,10 @@
 import { ChevronDownIcon } from '@heroicons/react/outline';
+import { useInfinexConnected, useInfinexSupportedEvmNetworks } from '@infinex/connect-sdk';
 import { Trans } from '@lingui/macro';
 import {
   Box,
   BoxProps,
+  Chip,
   ListItemText,
   MenuItem,
   SvgIcon,
@@ -12,10 +14,12 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useWeb3Context } from 'src/libs/hooks/useWeb3Context';
 import { useRootStore } from 'src/store/root';
 import { BaseNetworkConfig } from 'src/ui-config/networksConfig';
 import { DASHBOARD } from 'src/utils/events';
+import { toHex } from 'viem';
 import { useShallow } from 'zustand/shallow';
 
 import {
@@ -117,9 +121,12 @@ export const MarketSwitcher = () => {
   const theme = useTheme();
   const upToLG = useMediaQuery(theme.breakpoints.up('lg'));
   const downToXSM = useMediaQuery(theme.breakpoints.down('xsm'));
+  const isInfinexConnected = useInfinexConnected();
+  const { data: infinexSupportedEvmNetworks } = useInfinexSupportedEvmNetworks();
   const [trackEvent, currentMarket, setCurrentMarket] = useRootStore(
     useShallow((store) => [store.trackEvent, store.currentMarket, store.setCurrentMarket])
   );
+  const { switchNetwork, chainId: activeChain } = useWeb3Context();
 
   const isV3MarketsAvailable = availableMarkets
     .map((marketId: CustomMarket) => {
@@ -129,9 +136,14 @@ export const MarketSwitcher = () => {
     })
     .some((item) => !!item);
 
-  const handleMarketSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMarketSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.value as unknown as CustomMarket;
+
     trackEvent(DASHBOARD.CHANGE_MARKET, { market: e.target.value });
-    setCurrentMarket(e.target.value as unknown as CustomMarket);
+    setCurrentMarket(selected);
+
+    const { market } = getMarketInfoById(selected);
+    await switchNetwork(market.chainId);
   };
 
   const marketBlurbs: { [key: string]: JSX.Element } = {
@@ -142,6 +154,41 @@ export const MarketSwitcher = () => {
       <Trans>Optimized for efficiency and risk by supporting blue-chip collateral assets</Trans>
     ),
   };
+
+  const filteredMarkets = useMemo(() => {
+    return availableMarkets.filter((marketId) => {
+      const { market } = getMarketInfoById(marketId);
+      const wrongVersion =
+        (market.v3 && selectedMarketVersion === SelectedMarketVersion.V2) ||
+        (!market.v3 && selectedMarketVersion === SelectedMarketVersion.V3);
+      return !wrongVersion;
+    });
+  }, [selectedMarketVersion]);
+
+  const sortedMarkets = useMemo(() => {
+    return [...filteredMarkets].sort((a, b) => {
+      const { market: MA } = getMarketInfoById(a);
+      const { market: MB } = getMarketInfoById(b);
+      const chainA = toHex(MA.chainId);
+      const chainB = toHex(MB.chainId);
+      const ena = !isInfinexConnected || infinexSupportedEvmNetworks?.includes(chainA);
+      const enb = !isInfinexConnected || infinexSupportedEvmNetworks?.includes(chainB);
+      if (ena === enb) return 0;
+      return ena ? -1 : 1;
+    });
+  }, [filteredMarkets, infinexSupportedEvmNetworks, isInfinexConnected]);
+
+  useEffect(() => {
+    if (!currentMarket) return;
+
+    const { market } = getMarketInfoById(currentMarket);
+    // only switch if we’re not already on the right chain
+    if (activeChain !== market.chainId) {
+      switchNetwork(market.chainId);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeChain]);
 
   return (
     <TextField
@@ -182,10 +229,7 @@ export const MarketSwitcher = () => {
                     }}
                   >
                     {getMarketHelpData(market.marketTitle).name} {market.isFork ? 'Fork' : ''}
-                    {upToLG &&
-                    (currentMarket === 'proto_mainnet_v3' || currentMarket === 'proto_lido_v3')
-                      ? 'Instance'
-                      : ' Market'}
+                    {upToLG && currentMarket === 'proto_mainnet_v3' ? 'Instance' : ' Market'}
                   </Typography>
                   {market.v3 ? (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -376,30 +420,47 @@ export const MarketSwitcher = () => {
           </StyledToggleButtonGroup>
         </Box>
       )}
-      {availableMarkets.map((marketId: CustomMarket) => {
+
+      {sortedMarkets.map((marketId) => {
         const { market, logo } = getMarketInfoById(marketId);
-        const marketNaming = getMarketHelpData(market.marketTitle);
+        const naming = getMarketHelpData(market.marketTitle);
+        const chainId = toHex(market.chainId);
+        const isEnabled =
+          (!isInfinexConnected || infinexSupportedEvmNetworks?.includes(chainId)) && market.v3;
+
         return (
           <MenuItem
             key={marketId}
             data-cy={`marketSelector_${marketId}`}
             value={marketId}
+            disabled={!isEnabled}
             sx={{
               '.MuiListItemIcon-root': { minWidth: 'unset' },
-              display:
-                (market.v3 && selectedMarketVersion === SelectedMarketVersion.V2) ||
-                (!market.v3 && selectedMarketVersion === SelectedMarketVersion.V3)
-                  ? 'none'
-                  : 'flex',
+              opacity: isEnabled ? 1 : 0.5,
             }}
           >
-            <MarketLogo size={32} logo={logo} testChainName={marketNaming.testChainName} />
+            <MarketLogo size={32} logo={logo} testChainName={naming.testChainName} />
             <ListItemText sx={{ mr: 0 }}>
-              {marketNaming.name} {market.isFork ? 'Fork' : ''}
+              {naming.name} {market.isFork ? 'Fork' : ''}{' '}
+              {!isEnabled && (
+                <Chip
+                  label={<Trans>Coming soon</Trans>}
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    ml: 1,
+                    borderColor: 'rgba(255,255,255,0.8)',
+                    color: 'rgba(255,255,255,0.8)',
+                    backgroundColor: 'transparent',
+                    fontSize: '0.75rem',
+                    height: '24px',
+                  }}
+                />
+              )}
             </ListItemText>
             <ListItemText sx={{ textAlign: 'right' }}>
               <Typography color="text.muted" variant="description">
-                {marketNaming.testChainName}
+                {naming.testChainName}
               </Typography>
             </ListItemText>
           </MenuItem>
