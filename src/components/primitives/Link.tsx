@@ -140,7 +140,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link
 // Reassign everything to dashboard route to get rid of routes while minimizing errors
 export const ROUTES = {
   dashboard: '/',
-  markets: '/',
+  markets: '/markets',
   staking: '/',
   governance: '/',
   faucet: '/',
@@ -148,8 +148,9 @@ export const ROUTES = {
   /* eslint-disable @typescript-eslint/no-unused-vars */
   marketMigrationTool: (marketName: CustomMarket) => `/`,
   dynamicRenderedProposal: (proposalId: number) => `/`,
-  reserveOverview: (underlyingAsset: string, marketName: CustomMarket) => `/`,
   /* eslint-enable @typescript-eslint/no-unused-vars */
+  reserveOverview: (underlyingAsset: string, marketName: CustomMarket) =>
+    `/reserve-overview/?underlyingAsset=${underlyingAsset}&marketName=${marketName}`,
   history: '/',
   bridge: '/',
   safetyModule: '/',
