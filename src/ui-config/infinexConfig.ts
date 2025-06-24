@@ -15,6 +15,8 @@ const getCustomBaseUrl = () => {
 const infinexConfig: InfinexConnectConfig = {
   appKey: 'aave',
   connectBaseUrl: getCustomBaseUrl(),
+  logLevel: isDebug ? 'debug' : 'info',
+  debugLevel: 2,
   debug: {
     showLogs: isDebug,
     iframeOptions: {
