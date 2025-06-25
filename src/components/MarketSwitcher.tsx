@@ -35,6 +35,9 @@ import {
 import StyledToggleButton from './StyledToggleButton';
 import StyledToggleButtonGroup from './StyledToggleButtonGroup';
 
+// our “mainnet” fallback market id
+const DEFAULT_MAINNET_MARKET = CustomMarket.proto_mainnet;
+
 export const getMarketInfoById = (marketId: CustomMarket) => {
   const market: MarketDataType = marketsData[marketId as CustomMarket];
   const network: BaseNetworkConfig = networkConfigs[market.chainId];
@@ -181,16 +184,25 @@ export const MarketSwitcher = () => {
   }, [filteredMarkets, infinexSupportedEvmNetworks, isInfinexConnected]);
 
   useEffect(() => {
-    if (!currentMarket || !isInfinexConnected || !connector) return;
+    if (!currentMarket || !isInfinexConnected || !connector || !infinexSupportedEvmNetworks) return;
 
     const { market } = getMarketInfoById(currentMarket);
+
+    // if the current market’s chainId isn’t in the supported list, reset to mainnet
+    if (!infinexSupportedEvmNetworks.includes(toHex(market.chainId))) {
+      // track the fallback
+      trackEvent(DASHBOARD.CHANGE_MARKET, { market: DEFAULT_MAINNET_MARKET });
+      setCurrentMarket(DEFAULT_MAINNET_MARKET);
+      return;
+    }
+
     // only switch if we’re not already on the right chain
     if (activeChain !== market.chainId) {
       switchNetwork(market.chainId);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentMarket, isInfinexConnected, connector]);
+  }, [currentMarket, isInfinexConnected, connector, infinexSupportedEvmNetworks]);
 
   return (
     <TextField
