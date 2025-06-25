@@ -1,6 +1,6 @@
 import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -120,19 +120,38 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link
   );
 });
 
+// export const ROUTES = {
+//   dashboard: '/',
+//   markets: '/markets',
+//   staking: '/staking',
+//   governance: '/governance',
+//   faucet: '/faucet',
+//   migrationTool: '/v3-migration',
+//   marketMigrationTool: (marketName: CustomMarket) => `/v3-migration/?market=${marketName}`,
+//   dynamicRenderedProposal: (proposalId: number) =>
+//     `/governance/v3/proposal?proposalId=${proposalId}`,
+//   reserveOverview: (underlyingAsset: string, marketName: CustomMarket) =>
+//     `/reserve-overview/?underlyingAsset=${underlyingAsset}&marketName=${marketName}`,
+//   history: '/history',
+//   bridge: '/bridge',
+//   safetyModule: '/safety-module',
+// };
+
+// Reassign everything to dashboard route to get rid of routes while minimizing errors
 export const ROUTES = {
   dashboard: '/',
   markets: '/markets',
-  staking: '/staking',
-  governance: '/governance',
-  faucet: '/faucet',
-  migrationTool: '/v3-migration',
-  marketMigrationTool: (marketName: CustomMarket) => `/v3-migration/?market=${marketName}`,
-  dynamicRenderedProposal: (proposalId: number) =>
-    `/governance/v3/proposal?proposalId=${proposalId}`,
+  staking: '/',
+  governance: '/',
+  faucet: '/',
+  migrationTool: '/',
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  marketMigrationTool: (marketName: CustomMarket) => `/${marketName}`,
+  dynamicRenderedProposal: (proposalId: number) => `/${proposalId}`,
+  /* eslint-enable @typescript-eslint/no-unused-vars */
   reserveOverview: (underlyingAsset: string, marketName: CustomMarket) =>
     `/reserve-overview/?underlyingAsset=${underlyingAsset}&marketName=${marketName}`,
-  history: '/history',
-  bridge: '/bridge',
-  safetyModule: '/safety-module',
+  history: '/',
+  bridge: '/',
+  safetyModule: '/',
 };

@@ -36,7 +36,9 @@ export function getMaxAmountAvailableToSupply(
     maxAmountToSupply.gt(0) &&
     underlyingAsset.toLowerCase() === API_ETH_MOCK_ADDRESS.toLowerCase()
   ) {
-    maxAmountToSupply = maxAmountToSupply.minus(minRemainingBaseToken);
+    if (minRemainingBaseToken) {
+    }
+    // maxAmountToSupply = maxAmountToSupply.minus(minRemainingBaseToken);
   }
 
   // make sure we don't try to supply more then maximum supply cap

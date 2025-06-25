@@ -2,9 +2,10 @@ import { API_ETH_MOCK_ADDRESS, ERC20Service, transactionType } from '@aave/contr
 import { SignatureLike } from '@ethersproject/bytes';
 import { JsonRpcProvider, TransactionResponse } from '@ethersproject/providers';
 import { BigNumber, PopulatedTransaction, utils } from 'ethers';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { useIsContractAddress } from 'src/hooks/useIsContractAddress';
 import { useRootStore } from 'src/store/root';
+import { infinexConnect } from 'src/ui-config/infinexConfig';
 import { wagmiConfig } from 'src/ui-config/wagmiConfig';
 import { hexToAscii } from 'src/utils/utils';
 import { UserRejectedRequestError } from 'viem';
@@ -44,7 +45,7 @@ let didAutoConnectForCypress = false;
 export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ children }) => {
   const { switchChainAsync } = useSwitchChain();
   const { watchAssetAsync } = useWatchAsset();
-  const { chainId, address } = useAccount();
+  const { chainId, address, connector } = useAccount();
   const { connect, connectors } = useConnect();
 
   const [readOnlyModeAddress, setReadOnlyModeAddress] = useState<string | undefined>();
@@ -89,6 +90,19 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
     didAutoConnectForCypress = true;
   }, [connect, connectors]);
 
+  /** make sure we only call connect() once */
+  const hasAttempted = useRef(false);
+  useEffect(() => {
+    if (hasAttempted.current || !infinexConnect.shouldAutoConnect) return;
+
+    const infinexConnector = connectors.find((c) => c.id === 'xyz.infinex');
+
+    if (!infinexConnector) return; // Wagmi hasn't populated it yet
+
+    hasAttempted.current = true;
+    connect({ connector: infinexConnector });
+  }, [connectors, connect]);
+
   const sendTx = async (
     txData: transactionType | PopulatedTransaction
   ): Promise<TransactionResponse> => {
@@ -120,7 +134,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
 
   const switchNetwork = async (newChainId: number) => {
     try {
-      await switchChainAsync({ chainId: newChainId });
+      await switchChainAsync({ chainId: newChainId, connector });
       setSwitchNetworkError(undefined);
     } catch (switchError) {
       if (switchError.code === UserRejectedRequestError.code) {
