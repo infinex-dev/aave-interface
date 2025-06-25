@@ -71,20 +71,6 @@ const UserMenuDropdown: React.FC = () => {
                 <Typography variant="buttonM">Profile</Typography>
               </MenuItem>
               <Divider sx={{ pt: 2 }} />
-              <Box>
-                <Typography
-                  variant="description"
-                  color="textSecondary"
-                  gutterBottom
-                  fontSize="small"
-                >
-                  Available balance
-                </Typography>
-                <Typography variant="subheader1" fontSize="medium" color="lightgreen">
-                  {balances?.chainBalanceNative.formatted ?? '0'} ETH
-                </Typography>
-              </Box>
-
               {user?.username && (
                 <>
                   <Divider sx={{ pt: 2 }} />
@@ -96,7 +82,7 @@ const UserMenuDropdown: React.FC = () => {
                         gutterBottom
                         fontSize="small"
                       >
-                        Other balances
+                        Total Infinex balance
                       </Typography>
                       <Typography variant="subheader1" fontSize="medium">
                         {balances?.totalBalanceUsd.formatted ?? '0'} USD
