@@ -70,7 +70,6 @@ const UserMenuDropdown: React.FC = () => {
               >
                 <Typography variant="buttonM">Profile</Typography>
               </MenuItem>
-              <Divider sx={{ pt: 2 }} />
               {user?.username && (
                 <>
                   <Divider sx={{ pt: 2 }} />
