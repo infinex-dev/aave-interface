@@ -25,9 +25,10 @@ export const BorrowedPositionsListItem = ({
   disableEModeSwitch,
 }: BorrowedPositionsListItemWrapperProps) => {
   const { borrowCap } = useAssetCaps();
-  const [currentMarket, currentMarketData] = useRootStore(
-    useShallow((state) => [state.currentMarket, state.currentMarketData])
-  );
+  const [
+    currentMarket,
+    // currentMarketData
+  ] = useRootStore(useShallow((state) => [state.currentMarket, state.currentMarketData]));
   const theme = useTheme();
   const downToXSM = useMediaQuery(theme.breakpoints.down('xsm'));
   const { openBorrow, openRepay, openDebtSwitch } = useModalContext();
@@ -102,7 +103,7 @@ interface BorrowedPositionsListItemProps extends DashboardReserve {
 
 const BorrowedPositionsListItemDesktop = ({
   reserve,
-  disableBorrow,
+  // disableBorrow,
   disableSwitch,
   disableRepay,
   showSwitchButton,
@@ -112,7 +113,7 @@ const BorrowedPositionsListItemDesktop = ({
   variableDebtTokenAddress,
   incentives,
   onDetbSwitchClick,
-  onOpenBorrow,
+  // onOpenBorrow,
   onOpenRepay,
 }: BorrowedPositionsListItemProps) => {
   const currentMarket = useRootStore((state) => state.currentMarket);

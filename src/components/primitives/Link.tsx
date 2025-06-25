@@ -146,8 +146,8 @@ export const ROUTES = {
   faucet: '/',
   migrationTool: '/',
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  marketMigrationTool: (marketName: CustomMarket) => `/`,
-  dynamicRenderedProposal: (proposalId: number) => `/`,
+  marketMigrationTool: (marketName: CustomMarket) => `/${marketName}`,
+  dynamicRenderedProposal: (proposalId: number) => `/${proposalId}`,
   /* eslint-enable @typescript-eslint/no-unused-vars */
   reserveOverview: (underlyingAsset: string, marketName: CustomMarket) =>
     `/reserve-overview/?underlyingAsset=${underlyingAsset}&marketName=${marketName}`,

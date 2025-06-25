@@ -11,7 +11,7 @@ import { showExternalIncentivesTooltip } from 'src/utils/utils';
 import { useShallow } from 'zustand/shallow';
 
 import { ListColumn } from '../../../../components/lists/ListColumn';
-import { isFeatureEnabled } from '../../../../utils/marketsAndNetworksConfig';
+// import { isFeatureEnabled } from '../../../../utils/marketsAndNetworksConfig';
 import { ListAPRColumn } from '../ListAPRColumn';
 import { ListButtonsColumn } from '../ListButtonsColumn';
 import { ListItemUsedAsCollateral } from '../ListItemUsedAsCollateral';
@@ -26,15 +26,15 @@ export const SuppliedPositionsListItem = ({
   underlyingAsset,
 }: DashboardReserve) => {
   const { user } = useAppDataContext();
-  const { isIsolated, aIncentivesData, aTokenAddress, isFrozen, isActive, isPaused } = reserve;
-  const { openSupply, openWithdraw, openCollateralChange, openSwap } = useModalContext();
+  const { isIsolated, aIncentivesData, aTokenAddress, isActive, isPaused } = reserve;
+  const { openWithdraw, openCollateralChange, openSwap } = useModalContext();
   const { debtCeiling } = useAssetCaps();
   const [trackEvent, currentMarketData, currentMarket] = useRootStore(
     useShallow((store) => [store.trackEvent, store.currentMarketData, store.currentMarket])
   );
 
   // const showSwitchButton = isFeatureEnabled.liquiditySwap(currentMarketData);
-  const showSwitchButton = false;
+  const showSwitchButton = false && currentMarketData; // unused var workaround
 
   const canBeEnabledAsCollateral = user
     ? !debtCeiling.isMaxed &&
@@ -46,7 +46,7 @@ export const SuppliedPositionsListItem = ({
 
   const disableSwap = !isActive || isPaused || reserve.symbol == 'stETH';
   const disableWithdraw = !isActive || isPaused;
-  const disableSupply = !isActive || isFrozen || isPaused;
+  // const disableSupply = !isActive || isFrozen || isPaused;
 
   return (
     <ListItemWrapper
