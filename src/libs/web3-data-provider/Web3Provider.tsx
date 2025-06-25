@@ -45,7 +45,7 @@ let didAutoConnectForCypress = false;
 export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ children }) => {
   const { switchChainAsync } = useSwitchChain();
   const { watchAssetAsync } = useWatchAsset();
-  const { chainId, address } = useAccount();
+  const { chainId, address, connector } = useAccount();
   const { connect, connectors } = useConnect();
 
   const [readOnlyModeAddress, setReadOnlyModeAddress] = useState<string | undefined>();
@@ -134,7 +134,7 @@ export const Web3ContextProvider: React.FC<{ children: ReactElement }> = ({ chil
 
   const switchNetwork = async (newChainId: number) => {
     try {
-      await switchChainAsync({ chainId: newChainId });
+      await switchChainAsync({ chainId: newChainId, connector });
       setSwitchNetworkError(undefined);
     } catch (switchError) {
       if (switchError.code === UserRejectedRequestError.code) {

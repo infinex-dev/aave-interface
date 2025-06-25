@@ -2488,9 +2488,9 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@infinex/connect-sdk@file:./vendor/infinex-connect-sdk-0.0.14.tgz":
-  version "0.0.14"
-  resolved "file:./vendor/infinex-connect-sdk-0.0.14.tgz#3cd44c2a77924344299308cd9360e581eaaeb153"
+"@infinex/connect-sdk@file:./vendor/infinex-connect-sdk-0.0.16.tgz":
+  version "0.0.16"
+  resolved "file:./vendor/infinex-connect-sdk-0.0.16.tgz#f5de48142bc7f6d969e9c49226738396b11623af"
   dependencies:
     "@solana/wallet-adapter-base" "^0.9.24"
     "@solana/wallet-standard-features" "^1.3.0"
@@ -7488,9 +7488,9 @@ emittery@^0.13.1:
   integrity sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==
 
 emittery@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/emittery/-/emittery-1.1.0.tgz#7b5a00ec9a315fa9bfabeba0673920a1bb385f1b"
-  integrity sha512-rsX7ktqARv/6UQDgMaLfIqUWAEzzbCQiVh7V9rhDXp6c37yoJcks12NVD+XPkgl4AEavmNhVfrhGoqYwIsMYYA==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/emittery/-/emittery-1.2.0.tgz#466edb32bada8d9b35f779c3ee8c514ac2df8dc0"
+  integrity sha512-KxdRyyFcS85pH3dnU8Y5yFUm2YJdaHwcBZWrfG8o89ZY9a13/f9itbN+YG3ELbBo9Pg5zvIozstmuV8bX13q6g==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -14037,9 +14037,9 @@ viem@>=2.23.11, viem@^2.29.2:
     ws "8.18.1"
 
 viem@>=2.29.0, viem@^2.23.15:
-  version "2.31.3"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.31.3.tgz#4157d7c87db5a23eee5f5e230849d5f30e731825"
-  integrity sha512-q3JGI5QFB4LEiLfg9f2ZwjUygAn2W0wMLtj++7E/L2i8Y7zKAkR4TEEOhwBn7gyYXpuc7f1vfd26PJbkEKuj5w==
+  version "2.31.4"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.31.4.tgz#a8cce5579cc495a2586a16dd4062deecc0f53f1d"
+  integrity sha512-0UZ/asvzl6p44CIBRDbwEcn3HXIQQurBZcMo5qmLhQ8s27Ockk+RYohgTLlpLvkYs8/t4UUEREAbHLuek1kXcw==
   dependencies:
     "@noble/curves" "1.9.2"
     "@noble/hashes" "1.8.0"
