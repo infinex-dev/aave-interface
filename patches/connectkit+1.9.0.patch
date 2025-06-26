@@ -1,5 +1,5 @@
 diff --git a/node_modules/connectkit/build/index.es.js b/node_modules/connectkit/build/index.es.js
-index da2ba29..13b8002 100644
+index da2ba29..4181155 100644
 --- a/node_modules/connectkit/build/index.es.js
 +++ b/node_modules/connectkit/build/index.es.js
 @@ -6960,8 +6960,7 @@ const ConnectorItem = ({ wallet, isRecent, }) => {
@@ -9,6 +9,7 @@ index da2ba29..13b8002 100644
 -    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') &&
 -        isCoinbaseWalletConnector(wallet.connector.id);
 +    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') && (isCoinbaseWalletConnector(wallet.connector.id) || wallet.connector.id === 'xyz.infinex');
+     if (redirectToMoreWallets || shouldConnectImmediately)
          deeplink = undefined; // mobile redirects to more wallets page
      return (jsxs(ConnectorButton, { type: "button", as: deeplink ? 'a' : undefined, href: deeplink ? deeplink : undefined, disabled: context.route !== routes.CONNECTORS, onClick: deeplink
 @@ -6973,6 +6972,8 @@ const ConnectorItem = ({ wallet, isRecent, }) => {
