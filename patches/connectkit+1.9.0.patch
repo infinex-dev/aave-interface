@@ -1,5 +1,5 @@
 diff --git a/node_modules/connectkit/build/index.es.js b/node_modules/connectkit/build/index.es.js
-index da2ba29..be87c0e 100644
+index da2ba29..13b8002 100644
 --- a/node_modules/connectkit/build/index.es.js
 +++ b/node_modules/connectkit/build/index.es.js
 @@ -6960,8 +6960,7 @@ const ConnectorItem = ({ wallet, isRecent, }) => {
@@ -8,7 +8,15 @@ index da2ba29..be87c0e 100644
      // Safari requires opening popup on user gesture, so we connect immediately here
 -    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') &&
 -        isCoinbaseWalletConnector(wallet.connector.id);
-+    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') && (isCoinbaseWalletConnector(wallet.connector.id) || wallet.connector.id === 'xyz.infinex');
-     if (redirectToMoreWallets || shouldConnectImmediately)
++    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') && (isCoinbaseWalletConnector(wallet.connector.id) || wallet.connector.id === 'xyz.infinex');     if (redirectToMoreWallets || shouldConnectImmediately)
          deeplink = undefined; // mobile redirects to more wallets page
      return (jsxs(ConnectorButton, { type: "button", as: deeplink ? 'a' : undefined, href: deeplink ? deeplink : undefined, disabled: context.route !== routes.CONNECTORS, onClick: deeplink
+@@ -6973,6 +6972,8 @@ const ConnectorItem = ({ wallet, isRecent, }) => {
+                 else {
+                     if (shouldConnectImmediately) {
+                         connect({ connector: wallet === null || wallet === void 0 ? void 0 : wallet.connector });
++                        context.setConnector({ id: wallet.id });
++                        return;
+                     }
+                     context.setRoute(routes.CONNECT);
+                     context.setConnector({ id: wallet.id });
