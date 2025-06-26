@@ -20,7 +20,7 @@ index da2ba29..6b794d0 100644
 @@ -6961,7 +6969,7 @@ const ConnectorItem = ({ wallet, isRecent, }) => {
      const redirectToMoreWallets = isMobile && isWalletConnectConnector(wallet.id);
      // Safari requires opening popup on user gesture, so we connect immediately here
-     const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') &&
+     const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios' || isMobile) &&
 -        isCoinbaseWalletConnector(wallet.connector.id);
 +        (isCoinbaseWalletConnector(wallet.connector.id) || wallet.connector.id === 'xyz.infinex');
      if (redirectToMoreWallets || shouldConnectImmediately)
