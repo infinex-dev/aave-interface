@@ -8,7 +8,7 @@ index da2ba29..13b8002 100644
      // Safari requires opening popup on user gesture, so we connect immediately here
 -    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') &&
 -        isCoinbaseWalletConnector(wallet.connector.id);
-+    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') && (isCoinbaseWalletConnector(wallet.connector.id) || wallet.connector.id === 'xyz.infinex');     if (redirectToMoreWallets || shouldConnectImmediately)
++    const shouldConnectImmediately = (detectBrowser() === 'safari' || detectBrowser() === 'ios') && (isCoinbaseWalletConnector(wallet.connector.id) || wallet.connector.id === 'xyz.infinex');
          deeplink = undefined; // mobile redirects to more wallets page
      return (jsxs(ConnectorButton, { type: "button", as: deeplink ? 'a' : undefined, href: deeplink ? deeplink : undefined, disabled: context.route !== routes.CONNECTORS, onClick: deeplink
 @@ -6973,6 +6972,8 @@ const ConnectorItem = ({ wallet, isRecent, }) => {
