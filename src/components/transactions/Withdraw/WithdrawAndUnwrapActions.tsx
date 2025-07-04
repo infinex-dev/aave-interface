@@ -94,17 +94,17 @@ export const WithdrawAndUnwrapAction = ({
 
   // const permitAvailable = tryPermit(tokenIn);
 
-  const usePermit = walletApprovalMethodPreference === ApprovalMethod.PERMIT;
+  const usePermit = true;
 
   const { approval: approvalAction } = useApprovalTx({
     usePermit,
     approvedAmount: {
-      amount: approvedAmount?.toString() || '0',
+      amount: '0',
       spender: tokenWrapperAddress,
       token: poolReserve.aTokenAddress,
       user,
     },
-    requiresApproval,
+    requiresApproval: true,
     assetAddress: poolReserve.aTokenAddress,
     symbol: poolReserve.symbol,
     decimals: poolReserve.decimals,
