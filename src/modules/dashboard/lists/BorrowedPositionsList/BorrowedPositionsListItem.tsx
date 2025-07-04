@@ -8,22 +8,29 @@ import { useAssetCaps } from 'src/hooks/useAssetCaps';
 import { useModalContext } from 'src/hooks/useModal';
 import { useRootStore } from 'src/store/root';
 import { DashboardReserve } from 'src/utils/dashboardSortUtils';
-// import { isFeatureEnabled } from 'src/utils/marketsAndNetworksConfig';
+import { displayGhoForMintableMarket } from 'src/utils/ghoUtilities';
+// @ts-expect-error - unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { isFeatureEnabled } from 'src/utils/marketsAndNetworksConfig';
 import { showExternalIncentivesTooltip } from 'src/utils/utils';
 import { useShallow } from 'zustand/shallow';
 
-import { ListAPRColumn } from '../ListAPRColumn';
+import { ListAPRColumn, ListGhoAPRColumn } from '../ListAPRColumn';
 import { ListButtonsColumn } from '../ListButtonsColumn';
 import { ListItemWrapper } from '../ListItemWrapper';
 import { ListMobileItemWrapper } from '../ListMobileItemWrapper';
 import { ListValueColumn } from '../ListValueColumn';
 import { ListValueRow } from '../ListValueRow';
-import { BorrowedPositionsListItemWrapperProps } from './BorrowedPositionsListItemWrapper';
+
+export interface BorrowedPositionsListItem {
+  item: DashboardReserve;
+  disableEModeSwitch: boolean;
+}
 
 export const BorrowedPositionsListItem = ({
   item,
   disableEModeSwitch,
-}: BorrowedPositionsListItemWrapperProps) => {
+}: BorrowedPositionsListItem) => {
   const { borrowCap } = useAssetCaps();
   const [
     currentMarket,
@@ -65,6 +72,7 @@ export const BorrowedPositionsListItem = ({
     totalBorrowsUSD: item.variableBorrowsUSD,
     borrowAPY: Number(reserve.variableBorrowAPY),
     incentives: reserve.vIncentivesData,
+    variableDebtTokenAddress: reserve.variableDebtTokenAddress,
     onDetbSwitchClick: () => {
       openDebtSwitch(reserve.underlyingAsset);
     },
@@ -118,6 +126,11 @@ const BorrowedPositionsListItemDesktop = ({
 }: BorrowedPositionsListItemProps) => {
   const currentMarket = useRootStore((state) => state.currentMarket);
 
+  const isGho = displayGhoForMintableMarket({
+    symbol: reserve.symbol,
+    currentMarket,
+  });
+
   return (
     <ListItemWrapper
       symbol={reserve.symbol}
@@ -138,14 +151,25 @@ const BorrowedPositionsListItemDesktop = ({
     >
       <ListValueColumn symbol={reserve.symbol} value={totalBorrows} subValue={totalBorrowsUSD} />
 
-      <ListAPRColumn
-        value={borrowAPY}
-        market={currentMarket}
-        protocolAction={ProtocolAction.borrow}
-        address={variableDebtTokenAddress}
-        incentives={incentives}
-        symbol={reserve.symbol}
-      />
+      {isGho ? (
+        <ListGhoAPRColumn
+          value={borrowAPY}
+          market={currentMarket}
+          protocolAction={ProtocolAction.borrow}
+          address={variableDebtTokenAddress}
+          incentives={incentives}
+          symbol={reserve.symbol}
+        />
+      ) : (
+        <ListAPRColumn
+          value={borrowAPY}
+          market={currentMarket}
+          protocolAction={ProtocolAction.borrow}
+          address={variableDebtTokenAddress}
+          incentives={incentives}
+          symbol={reserve.symbol}
+        />
+      )}
 
       <ListButtonsColumn>
         {showSwitchButton && (
