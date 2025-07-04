@@ -4,7 +4,6 @@
   "private": true,
   "license": "BSD-3-Clause",
   "scripts": {
-    "local-infinex": "rm -rf vendor/* && mkdir -p vendor && cp ../connect/packages/sdk/infinex-connect-sdk-0.0.18.tgz ./vendor",
     "dev": "next dev",
     "auth:npm": "npx google-artifactregistry-auth --credential-config \"$HOME/.npmrc\"",
     "dev:special": "NODE_OPTIONS='--inspect --max_old_space_size=8000' next dev",
@@ -34,8 +33,8 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@aave/contract-helpers": "1.34.0",
-    "@aave/math-utils": "1.34.0",
+    "@aave/contract-helpers": "1.36.0",
+    "@aave/math-utils": "1.36.0",
     "@amplitude/analytics-browser": "^2.13.0",
     "@bgd-labs/aave-address-book": "^4.22.1",
     "@cowprotocol/app-data": "^3.1.0",
@@ -46,7 +45,7 @@
     "@emotion/styled": "11.10.4",
     "@gelatonetwork/relay-sdk": "^5.5.5",
     "@heroicons/react": "^1.0.6",
-    "@infinex/connect-sdk": "file:./vendor/infinex-connect-sdk-0.0.18.tgz",
+    "@infinex/connect-sdk": "^0.0.18",
     "@lingui/core": "^4.14.0",
     "@lingui/react": "^4.14.1",
     "@mui/icons-material": "^5.10.14",
