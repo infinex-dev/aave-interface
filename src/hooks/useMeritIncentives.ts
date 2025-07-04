@@ -87,6 +87,8 @@ const antiLoopBorrowMessage =
 const lbtcCbbtcCampaignMessage =
   'You must supply LBTC and borrow cbBTC, while maintaining a health factor of 1.5 or below, in order to receive merit rewards. Please check the forum post for the full eligibility criteria.';
 
+// @ts-expect-error - unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StSLoopIncentiveProgramMessage =
   'You must supply stS and borrow wS in order to receive merit rewards. stS/wS e-mode can be used to maximize stS/wS loop. Please check the forum post for the full eligibility criteria.';
 
@@ -113,6 +115,8 @@ const lbtcCbbtcForumLink =
 const weethUsdcForumLink =
   'https://governance.aave.com/t/arfc-set-aci-as-emission-manager-for-liquidity-mining-programs/17898/120';
 
+// @ts-expect-error - unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StSLoopIncentiveProgramForumLink =
   'https://governance.aave.com/t/arfc-sts-loop-incentive-program/22368';
 

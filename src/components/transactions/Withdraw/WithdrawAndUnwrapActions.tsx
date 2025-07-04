@@ -12,6 +12,8 @@ import { useApprovedAmount } from 'src/hooks/useApprovedAmount';
 import { useModalContext } from 'src/hooks/useModal';
 import { useWeb3Context } from 'src/libs/hooks/useWeb3Context';
 import { useRootStore } from 'src/store/root';
+// @ts-expect-error - unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ApprovalMethod } from 'src/store/walletSlice';
 import { getErrorTextFromError, TxAction } from 'src/ui-config/errorMapping';
 import { queryKeysFactory } from 'src/ui-config/queries';
@@ -43,7 +45,8 @@ export const WithdrawAndUnwrapAction = ({
   sx,
   blocked,
 }: WithdrawAndUnwrapActionProps) => {
-  const [account, estimateGasLimit, walletApprovalMethodPreference, user, marketData] =
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [account, estimateGasLimit, _walletApprovalMethodPreference, user, marketData] =
     useRootStore(
       useShallow((state) => [
         state.account,

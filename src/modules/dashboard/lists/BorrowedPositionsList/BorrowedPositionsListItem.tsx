@@ -8,8 +8,9 @@ import { useAssetCaps } from 'src/hooks/useAssetCaps';
 import { useModalContext } from 'src/hooks/useModal';
 import { useRootStore } from 'src/store/root';
 import { DashboardReserve } from 'src/utils/dashboardSortUtils';
-// import { isFeatureEnabled } from 'src/utils/marketsAndNetworksConfig';
 import { displayGhoForMintableMarket } from 'src/utils/ghoUtilities';
+// @ts-expect-error - unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { isFeatureEnabled } from 'src/utils/marketsAndNetworksConfig';
 import { showExternalIncentivesTooltip } from 'src/utils/utils';
 import { useShallow } from 'zustand/shallow';
